@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vista Alegre | Grand Cru Experience</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+      html { scroll-behavior: smooth; }
+      body {
+        font-family: 'Outfit', sans-serif;
+        background-color: #0F0404;
+        color: #F8F5F2;
+        margin: 0;
+        overflow-x: hidden;
+      }
+      .font-serif { font-family: 'Cormorant Garamond', serif; }
+      
+      /* Estilo de Botão que você gostou */
+      .btn-pill {
+        @apply px-10 py-4 rounded-full font-bold uppercase tracking-[0.3em] text-[10px] transition-all duration-500 shadow-sm hover:shadow-xl transform hover:-translate-y-1 active:scale-95;
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar { width: 5px; }
+      ::-webkit-scrollbar-track { background: #0F0404; }
+      ::-webkit-scrollbar-thumb { background: #5E1914; }
+    </style>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              wine: {
+                light: '#8B261E',
+                DEFAULT: '#5E1914',
+                dark: '#2D090E',
+                black: '#0F0404',
+              },
+              gold: '#B68D40',
+              ivory: '#F8F5F2',
+            }
+          }
+        }
+      }
+    </script>
+    <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@19.0.0",
+    "react-dom": "https://esm.sh/react-dom@19.0.0",
+    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
+    "react-router-dom": "https://esm.sh/react-router-dom@6.22.3?external=react,react-dom",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/"
+  }
+}
+</script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
