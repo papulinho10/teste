@@ -40,21 +40,40 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose, items, onRemov
         className={`fixed inset-0 bg-black/50 z-[60] transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} 
         onClick={onClose}
       />
-      <div className={`fixed right-0 top-0 h-full w-full max-w-md bg-white z-[70] shadow-2xl transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+      <div className={`fixed right-0 top-0 h-[100dvh] w-full max-w-md bg-white z-[70] shadow-2xl transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="flex flex-col h-full">
-          <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-cream">
-            <h2 className="text-xl font-serif font-bold text-wine">
+          {/* Header */}
+          <div className="p-4 md:p-6 border-b border-gray-100 flex justify-between items-center bg-cream shrink-0">
+            {/* Mobile Back Button */}
+            <button onClick={onClose} className="md:hidden flex items-center text-wine hover:text-wine-light transition-colors group">
+               <svg className="w-5 h-5 mr-1 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+               </svg>
+               <span className="font-bold text-sm uppercase tracking-wider">Voltar</span>
+            </button>
+
+            <h2 className="text-xl font-serif font-bold text-wine flex items-center">
               Meu Pedido
-              {itemCount > 0 && <span className="ml-2 text-sm font-sans font-normal text-gray-500">({itemCount} itens)</span>}
+              {itemCount > 0 && (
+                <span className="ml-2 w-6 h-6 bg-wine text-white text-xs font-sans rounded-full flex items-center justify-center shadow-sm">
+                  {itemCount}
+                </span>
+              )}
             </h2>
-            <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+            {/* Desktop Close Button */}
+            <button onClick={onClose} className="hidden md:block p-2 hover:bg-gray-100 rounded-full transition-colors">
+              <svg className="w-6 h-6 text-gray-400 hover:text-wine" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
+            
+            {/* Placeholder for alignment on mobile if needed, or just let flex justify-between handle it */}
+            <div className="w-8 md:hidden"></div> 
           </div>
 
-          <div className="flex-grow overflow-y-auto p-6 space-y-6">
+          {/* Items List */}
+          <div className="flex-grow overflow-y-auto p-4 md:p-6 space-y-6">
             {items.length === 0 ? (
               <div className="text-center py-20 space-y-4">
                 <p className="text-gray-400">Seu carrinho está vazio.</p>
@@ -67,23 +86,29 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose, items, onRemov
               </div>
             ) : (
               items.map(item => (
-                <div key={item.id} className="flex space-x-4 border-b border-gray-50 pb-4">
-                  <img src={item.imageUrl} alt={item.name} className="w-20 h-20 object-cover rounded-md" />
+                <div key={item.id} className="flex space-x-4 border-b border-gray-50 pb-4 last:border-0">
+                  <img src={item.imageUrl} alt={item.name} className="w-20 h-20 object-cover rounded-md shadow-sm" />
                   <div className="flex-grow">
                     <div className="flex justify-between items-start">
-                      <h3 className="font-serif font-bold text-wine leading-tight">{item.name}</h3>
-                      <button onClick={() => onRemove(item.id)} className="text-gray-400 hover:text-red-500">
+                      <h3 className="font-serif font-bold text-wine leading-tight pr-4">{item.name}</h3>
+                      <button onClick={() => onRemove(item.id)} className="text-gray-300 hover:text-red-500 p-1">
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                         </svg>
                       </button>
                     </div>
-                    <p className="text-sm text-gray-500 mb-2">R$ {item.price.toFixed(2)}</p>
+                    <p className="text-sm text-gray-500 mb-3">R$ {item.price.toFixed(2)}</p>
                     <div className="flex justify-between items-center">
-                      <div className="flex items-center space-x-3 border rounded-lg px-2 py-1">
-                        <button onClick={() => onUpdateQty(item.id, -1)} className="hover:text-gold">-</button>
-                        <span className="text-sm font-medium">{item.quantity}</span>
-                        <button onClick={() => onUpdateQty(item.id, 1)} className="hover:text-gold">+</button>
+                      <div className="flex items-center border border-gray-200 rounded-lg bg-gray-50">
+                        <button 
+                          onClick={() => onUpdateQty(item.id, -1)} 
+                          className="px-3 py-1 text-gray-500 hover:text-wine hover:bg-gray-100 rounded-l-lg transition-colors"
+                        >-</button>
+                        <span className="w-8 text-center text-sm font-medium">{item.quantity}</span>
+                        <button 
+                          onClick={() => onUpdateQty(item.id, 1)} 
+                          className="px-3 py-1 text-gray-500 hover:text-wine hover:bg-gray-100 rounded-r-lg transition-colors"
+                        >+</button>
                       </div>
                       <span className="font-bold text-wine">R$ {(item.price * item.quantity).toFixed(2)}</span>
                     </div>
@@ -93,8 +118,9 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose, items, onRemov
             )}
           </div>
 
+          {/* Footer */}
           {items.length > 0 && (
-            <div className="p-6 bg-cream border-t border-gray-100 space-y-4">
+            <div className="p-4 md:p-6 bg-cream border-t border-gray-100 space-y-4 shrink-0 safe-area-bottom">
               <div className="flex justify-between items-center text-lg font-serif">
                 <span>Total Estimado:</span>
                 <span className="font-bold text-wine text-2xl">R$ {total.toFixed(2)}</span>
@@ -103,7 +129,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose, items, onRemov
               <div className="flex flex-col gap-3">
                 <button 
                   onClick={handleCheckout}
-                  className="w-full bg-wine text-white py-4 rounded-full font-bold uppercase tracking-widest hover:bg-wine-dark transition-colors flex items-center justify-center space-x-3"
+                  className="w-full bg-wine text-white py-4 rounded-full font-bold uppercase tracking-widest hover:bg-wine-dark transition-colors flex items-center justify-center space-x-3 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transform duration-300"
                 >
                   <span>Finalizar no WhatsApp</span>
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -113,7 +139,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose, items, onRemov
                 
                 <button 
                   onClick={onClose}
-                  className="w-full bg-transparent text-wine border border-wine/20 py-3 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-wine/5 transition-colors"
+                  className="w-full bg-transparent text-wine/80 border border-wine/20 py-3 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-wine/5 hover:text-wine transition-colors active:bg-wine/10"
                 >
                   Continuar Comprando
                 </button>

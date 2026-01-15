@@ -83,12 +83,12 @@ const Navbar: React.FC<NavbarProps> = ({ cartCount, onOpenCart }) => {
             <div className={`rounded-full bg-white/5 flex items-center justify-center group-hover:bg-wine transition-all border border-white/5 ${
                isScrolled ? 'w-8 h-8' : 'w-9 h-9'
             }`}>
-              <svg className="w-3.5 h-3.5 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
               </svg>
             </div>
             {cartCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-gold text-wine-black text-[8px] w-3.5 h-3.5 rounded-full flex items-center justify-center font-black shadow-lg">
+              <span className="absolute -top-1.5 -right-1.5 bg-gold text-wine-black text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-black shadow-lg animate-bounce-short">
                 {cartCount}
               </span>
             )}
@@ -103,11 +103,11 @@ const Navbar: React.FC<NavbarProps> = ({ cartCount, onOpenCart }) => {
             aria-label="Menu"
           >
             {isMenuOpen ? (
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
             ) : (
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             )}
