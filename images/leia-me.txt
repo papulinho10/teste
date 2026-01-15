@@ -1,4 +1,0 @@
-Esta pasta foi criada para você colocar suas imagens.
-1. Salve a imagem da sua logo aqui dentro.
-2. Renomeie o arquivo da imagem para "logo.png".
-3. O site atualizará automaticamente para mostrar a nova logo.

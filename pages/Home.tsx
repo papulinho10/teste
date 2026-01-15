@@ -94,8 +94,57 @@ const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* NOVA SEÇÃO: Parada Perfeita */}
+      <section className="py-24 px-6 bg-[#0F0404] border-t border-white/5 relative overflow-hidden">
+        {/* Background Decorative Bloom */}
+        <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[500px] h-[500px] bg-wine/10 blur-[120px] rounded-full pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto flex flex-col-reverse md:flex-row items-center gap-16 md:gap-24">
+          
+          {/* Text Side */}
+          <div className="w-full md:w-1/2 space-y-8">
+            <div className="space-y-2">
+              <span className="text-gold font-bold uppercase tracking-[0.4em] text-[10px]">Localização Privilegiada</span>
+              <h2 className="font-serif text-4xl md:text-6xl text-ivory leading-none">
+                Uma Parada Perfeita <br/> 
+                <span className="text-white/30 italic">Durante o Passeio</span>
+              </h2>
+            </div>
+            
+            <div className="space-y-6 text-lg text-ivory/70 font-light leading-relaxed">
+              <p>
+                A Vista Alegre está localizada em pontos estratégicos de Gramado, dentro do Parque dos Bondinhos e na avenida principal, próxima a atrações turísticas como museus e o Super Carros, integrando-se naturalmente ao roteiro da cidade.
+              </p>
+              <p>
+                É o lugar ideal para fazer uma pausa, degustar um bom vinho, saborear produtos da serra e relaxar em um ambiente acolhedor, transformando a visita em um momento agradável e memorável.
+              </p>
+            </div>
+          </div>
+
+          {/* Image Side */}
+          <div className="w-full md:w-1/2 relative">
+             <div className="relative aspect-square md:aspect-[4/5] rounded-[2rem] overflow-hidden shadow-2xl border border-white/5 group">
+                <div className="absolute inset-0 bg-wine-dark/20 group-hover:bg-transparent transition-colors duration-500 z-10" />
+                {/* ⬇️ IMAGEM DA PARADA PERFEITA ⬇️ */}
+                {/* Substitua o arquivo abaixo pela foto de Gramado com a tábua de frios */}
+                <img 
+                  src="./images/view.jpg" 
+                  alt="Vista panorâmica da Serra Gaúcha com tábua de frios e vinho" 
+                  className="w-full h-full object-cover transform scale-105 group-hover:scale-110 transition-transform duration-[1.5s]"
+                />
+             </div>
+             {/* Floating Badge */}
+             <div className="absolute -bottom-6 -left-6 bg-wine-dark border border-white/10 p-6 rounded-2xl shadow-xl z-20 hidden md:block">
+                <span className="block text-gold text-2xl font-serif font-bold">Gramado</span>
+                <span className="block text-ivory/60 text-xs uppercase tracking-widest mt-1">Serra Gaúcha</span>
+             </div>
+          </div>
+
+        </div>
+      </section>
+
       {/* Seção de Contato */}
-      <section id="contato" className="py-24 px-6 bg-[#0B0303] text-white scroll-mt-24">
+      <section id="contato" className="py-24 px-6 bg-[#0B0303] text-white scroll-mt-24 border-t border-white/5">
         <div className="max-w-7xl mx-auto text-center">
           <h2 className="text-4xl md:text-6xl font-serif mb-6 text-ivory font-light">Entre em Contato</h2>
           <p className="text-white/40 mb-16 text-lg max-w-2xl mx-auto font-light">

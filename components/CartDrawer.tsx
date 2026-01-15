@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CartItem } from '../types';
 import { WHATSAPP_NUMBER } from '../constants';
 
@@ -13,6 +14,8 @@ interface CartDrawerProps {
 }
 
 const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose, items, onRemove, onUpdateQty, total }) => {
+  const navigate = useNavigate();
+
   const handleCheckout = () => {
     let message = `Olá! Gostaria de fazer um pedido na Adega Vista Alegre 🍷\n\nProdutos selecionados:\n`;
     items.forEach(item => {
@@ -22,6 +25,11 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose, items, onRemov
     
     const encodedMessage = encodeURIComponent(message);
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`, '_blank');
+  };
+
+  const handleGoToShop = () => {
+    onClose();
+    navigate('/vinhos');
   };
 
   return (
@@ -46,7 +54,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose, items, onRemov
               <div className="text-center py-20 space-y-4">
                 <p className="text-gray-400">Seu carrinho está vazio.</p>
                 <button 
-                  onClick={onClose}
+                  onClick={handleGoToShop}
                   className="text-wine font-bold border-b-2 border-wine hover:text-gold hover:border-gold transition-all pb-1"
                 >
                   Ver vinhos agora
