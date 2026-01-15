@@ -35,6 +35,7 @@ const Home: React.FC = () => {
           <div className="mb-8 relative group animate-fade-in">
             <div className="absolute inset-0 bg-gold/30 blur-[80px] rounded-full opacity-30 group-hover:opacity-60 transition-opacity duration-1000" />
             <div className="relative h-40 w-40 md:h-56 md:w-56 p-0 bg-white border border-gold/20 rounded-full shadow-[0_20px_60px_rgba(0,0,0,0.9)] overflow-hidden transform hover:scale-105 transition-transform duration-700 flex items-center justify-center">
+              {/* ⬇️ AQUI FICA A LOGO GRANDE (TELA INICIAL) ⬇️ */}
               <img 
                 src={LOGO_URL} 
                 alt="Vista Alegre" 

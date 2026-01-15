@@ -8,8 +8,10 @@ export const ADDRESS = 'Av. das Hortênsias, 5485';
 export const ADDRESS_SUB = 'Carniel, Gramado - RS, 95670-000';
 export const MAP_URL = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3479.167823564123!2d-50.8491512!3d-29.3521512!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9519310c85c8e31d%3A0xe5a1b3f7f8f9f0f!2sAv.%20das%20Hort%C3%AAnsias%2C%205485%20-%20Carniel%2C%20Gramado%20-%20RS%2C%2095670-000!5e0!3m2!1spt-BR!2sbr!4v1710000000000!5m2!1spt-BR!2sbr';
 
-// URL otimizada da logo
-export const LOGO_URL = 'https://raw.githubusercontent.com/lucas-felix-dev/vista-alegre-assets/main/logo-vista-alegre-circular.png';
+// ⬇️⬇️⬇️ LOGO LOCAL ⬇️⬇️⬇️
+// A logo agora está configurada para ler o arquivo dentro da pasta "assets"
+// Certifique-se de salvar sua imagem como "logo.png" dentro da pasta "assets"
+export const LOGO_URL = '/assets/logo.png';
 
 export const PRODUCTS: Product[] = [
   {

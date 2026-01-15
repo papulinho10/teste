@@ -12,6 +12,7 @@ const Footer: React.FC = () => {
           {/* Brand Section */}
           <div className="space-y-8 flex flex-col items-center md:items-start text-center md:text-left">
             <div className="h-32 w-32 rounded-full overflow-hidden border border-white/10 shadow-2xl bg-white flex items-center justify-center">
+              {/* ⬇️ AQUI FICA A LOGO (RODAPÉ) ⬇️ */}
               <img 
                 src={LOGO_URL} 
                 alt="Vista Alegre" 

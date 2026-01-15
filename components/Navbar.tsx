@@ -49,6 +49,7 @@ const Navbar: React.FC<NavbarProps> = ({ cartCount, onOpenCart }) => {
           <div className={`relative transition-all duration-500 rounded-full overflow-hidden bg-white shadow-lg group-hover:scale-105 border border-white ${
             isScrolled ? 'h-8 w-8' : 'h-10 w-10'
           }`}>
+            {/* ⬇️ AQUI FICA A LOGO (BARRA DE NAVEGAÇÃO) ⬇️ */}
             <img 
               src={LOGO_URL} 
               alt="Vista Alegre Logo" 
