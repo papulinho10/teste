@@ -62,15 +62,20 @@ const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-20">
           <div className="w-full md:w-1/2 relative group">
              <div className="absolute -top-10 -left-10 w-40 h-40 border-t-2 border-l-2 border-gold/20" />
-             <div className="aspect-[3/4] overflow-hidden rounded-[40px] shadow-2xl border border-white/5 bg-wine-dark/20 relative">
+             {/* 
+                ATUALIZADO PARA MOBILE: 
+                - aspect-[9/16] no mobile para ocupar a tela verticalmente (formato Stories/Reels).
+                - md:aspect-[3/4] no desktop para manter a elegância.
+             */}
+             <div className="aspect-[9/16] md:aspect-[3/4] overflow-hidden rounded-[40px] shadow-2xl border border-white/5 bg-wine-dark/20 relative">
                 {/* 
-                  ATUALIZADO: Vídeo do Google Drive via Iframe 
-                  URL Original: https://drive.google.com/file/d/1FCbmhZzjQHnaEIAftvocBAYAUa7TFtia/view?usp=sharing
-                  Embed URL: https://drive.google.com/file/d/1FCbmhZzjQHnaEIAftvocBAYAUa7TFtia/preview
+                  ATUALIZADO:
+                  - Adicionado scale-[1.05] (105%) para dar um leve zoom e cortar as bordas pretas do player do Drive.
+                  - w-full h-full para preencher o container ajustado.
                 */}
                 <iframe 
                   src="https://drive.google.com/file/d/1FCbmhZzjQHnaEIAftvocBAYAUa7TFtia/preview" 
-                  className="w-full h-full rounded-[40px]" 
+                  className="w-full h-full rounded-[40px] transform scale-[1.05] md:scale-100 transition-transform" 
                   style={{ border: 0 }}
                   allow="autoplay; encrypted-media"
                   title="Vista Alegre Video"
