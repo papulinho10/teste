@@ -1,10 +1,29 @@
 
 import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { WHATSAPP_NUMBER } from '../constants';
 
 const FloatingActions: React.FC = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const showBackButton = location.pathname !== '/';
+
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-4 items-end">
+      {/* Botão de Voltar (Aparece apenas se não estiver na home) */}
+      {showBackButton && (
+        <button
+          onClick={() => navigate('/')}
+          className="w-12 h-12 bg-white text-wine hover:text-wine-light rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.3)] flex items-center justify-center hover:scale-110 transition-transform group border border-wine/10"
+          aria-label="Voltar para Início"
+          title="Voltar para Início"
+        >
+          <svg className="w-5 h-5 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+        </button>
+      )}
+
       {/* WhatsApp Button */}
       <button
         onClick={() => window.open(`https://wa.me/${WHATSAPP_NUMBER}`, '_blank')}

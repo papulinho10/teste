@@ -11,12 +11,13 @@ const Footer: React.FC = () => {
           
           {/* Brand Section */}
           <div className="space-y-8 flex flex-col items-center md:items-start text-center md:text-left">
-            <div className="h-32 w-32 rounded-full overflow-hidden border border-white/10 shadow-2xl bg-white flex items-center justify-center">
+            {/* ATUALIZADO: Logo muito maior */}
+            <div className="h-48 w-48 rounded-full overflow-hidden bg-transparent flex items-center justify-center">
               {/* ⬇️ AQUI FICA A LOGO (RODAPÉ) ⬇️ */}
               <img 
                 src={LOGO_URL} 
                 alt="Vista Alegre" 
-                className="w-full h-full object-contain scale-[1.7]" 
+                className="w-full h-full object-contain" 
               />
             </div>
             <p className="text-ivory/50 font-light text-sm leading-relaxed max-w-xs">

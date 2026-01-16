@@ -39,21 +39,27 @@ const Navbar: React.FC<NavbarProps> = ({ cartCount, onOpenCart }) => {
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
-      isScrolled ? 'py-2 px-4' : 'py-4 px-6'
+      // Padding reduzido para uma barra mais compacta
+      isScrolled ? 'py-1 px-2' : 'py-3 px-6'
     }`}>
       {/* Barra Principal */}
       <div className={`max-w-7xl mx-auto flex justify-between items-center transition-all duration-500 rounded-full relative z-50 ${
-        isScrolled || isMenuOpen ? 'bg-wine-dark/90 backdrop-blur-md border border-white/5 px-4 py-1.5 shadow-xl' : 'bg-transparent'
+        // Padding interno ajustado (py-1)
+        isScrolled || isMenuOpen ? 'bg-wine-dark/90 backdrop-blur-md border border-white/5 px-6 py-1 shadow-xl' : 'bg-transparent'
       }`}>
         <Link to="/" className="flex items-center group">
-          <div className={`relative transition-all duration-500 rounded-full overflow-hidden bg-white shadow-lg group-hover:scale-105 border border-white ${
-            isScrolled ? 'h-8 w-8' : 'h-10 w-10'
+          {/* 
+             ATUALIZADO: Logo reduzida para diminuir a barra
+             - Normal: h-32 w-32 (128px)
+             - Scrolled: h-20 w-20 (80px)
+          */}
+          <div className={`relative transition-all duration-500 rounded-full overflow-hidden bg-transparent group-hover:scale-105 ${
+            isScrolled ? 'h-20 w-20' : 'h-32 w-32'
           }`}>
-            {/* ⬇️ AQUI FICA A LOGO (BARRA DE NAVEGAÇÃO) ⬇️ */}
             <img 
               src={LOGO_URL} 
               alt="Vista Alegre Logo" 
-              className="w-full h-full object-contain scale-[1.6] transform transition-transform"
+              className="w-full h-full object-contain"
             />
           </div>
           <div className={`flex flex-col ml-3 transition-all duration-500 ${isScrolled ? 'opacity-0 scale-90 translate-x-[-10px] w-0' : 'opacity-100'}`}>

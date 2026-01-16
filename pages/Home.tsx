@@ -32,9 +32,9 @@ const Home: React.FC = () => {
         </div>
         
         <div className="relative z-10 flex flex-col items-center text-center px-6">
-          <div className="mb-8 relative group animate-fade-in">
-            <div className="absolute inset-0 bg-gold/30 blur-[80px] rounded-full opacity-30 group-hover:opacity-60 transition-opacity duration-1000" />
-            <div className="relative h-40 w-40 md:h-56 md:w-56 p-0 bg-white border border-gold/20 rounded-full shadow-[0_20px_60px_rgba(0,0,0,0.9)] overflow-hidden transform hover:scale-105 transition-transform duration-700 flex items-center justify-center">
+          {/* ATUALIZADO: mb-0 para diminuir espaçamento entre logo e título */}
+          <div className="mb-0 relative group animate-fade-in">
+            <div className="relative h-56 w-56 md:h-80 md:w-80 p-0 bg-transparent rounded-full overflow-hidden transform hover:scale-105 transition-transform duration-700 flex items-center justify-center">
               {/* ⬇️ AQUI FICA A LOGO GRANDE (TELA INICIAL) ⬇️ */}
               <img 
                 src={LOGO_URL} 
@@ -63,18 +63,18 @@ const Home: React.FC = () => {
           <div className="w-full md:w-1/2 relative group">
              <div className="absolute -top-10 -left-10 w-40 h-40 border-t-2 border-l-2 border-gold/20" />
              <div className="aspect-[3/4] overflow-hidden rounded-[40px] shadow-2xl border border-white/5 bg-wine-dark/20 relative">
-                <div className="absolute inset-0 bg-wine-black/10 z-10 pointer-events-none" />
-                <video 
-                  autoPlay 
-                  loop 
-                  muted 
-                  playsInline
-                  className="w-full h-full object-cover transition-transform duration-[2.5s]"
-                  poster="https://images.unsplash.com/photo-1553830591-2f39e38a013c?auto=format&fit=crop&q=80&w=1000"
-                >
-                  {/* Vídeo de exemplo. Substitua a URL abaixo pelo vídeo oficial da Vista Alegre quando disponível */}
-                  <source src="https://videos.pexels.com/video-files/6982842/6982842-hd_1080_1920_25fps.mp4" type="video/mp4" />
-                </video>
+                {/* 
+                  ATUALIZADO: Vídeo do Google Drive via Iframe 
+                  URL Original: https://drive.google.com/file/d/1FCbmhZzjQHnaEIAftvocBAYAUa7TFtia/view?usp=sharing
+                  Embed URL: https://drive.google.com/file/d/1FCbmhZzjQHnaEIAftvocBAYAUa7TFtia/preview
+                */}
+                <iframe 
+                  src="https://drive.google.com/file/d/1FCbmhZzjQHnaEIAftvocBAYAUa7TFtia/preview" 
+                  className="w-full h-full rounded-[40px]" 
+                  style={{ border: 0 }}
+                  allow="autoplay; encrypted-media"
+                  title="Vista Alegre Video"
+                ></iframe>
              </div>
           </div>
           <div className="w-full md:w-1/2 space-y-10">
@@ -126,9 +126,8 @@ const Home: React.FC = () => {
              <div className="relative aspect-square md:aspect-[4/5] rounded-[2rem] overflow-hidden shadow-2xl border border-white/5 group">
                 <div className="absolute inset-0 bg-wine-dark/20 group-hover:bg-transparent transition-colors duration-500 z-10" />
                 {/* ⬇️ IMAGEM DA PARADA PERFEITA ⬇️ */}
-                {/* Substitua o arquivo abaixo pela foto de Gramado com a tábua de frios */}
                 <img 
-                  src="./images/view.jpg" 
+                  src="https://i.postimg.cc/5t2yqCPK/imagem-para-site.jpg" 
                   alt="Vista panorâmica da Serra Gaúcha com tábua de frios e vinho" 
                   className="w-full h-full object-cover transform scale-105 group-hover:scale-110 transition-transform duration-[1.5s]"
                 />

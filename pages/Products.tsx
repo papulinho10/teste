@@ -19,6 +19,18 @@ const Products: React.FC<ProductsProps> = ({ onAddToCart }) => {
   return (
     <div className="pt-40 pb-32 px-6 bg-wine-black min-h-screen">
       <div className="max-w-7xl mx-auto">
+        {/* Link Voltar ao Início */}
+        <div className="mb-8">
+            <Link to="/" className="inline-flex items-center text-gold/80 hover:text-white transition-colors text-[10px] font-bold uppercase tracking-[0.3em] gap-2 group">
+              <span className="p-1 rounded-full border border-gold/20 group-hover:border-white/50 transition-colors">
+                 <svg className="w-3 h-3 transform group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                 </svg>
+              </span>
+              Voltar ao Início
+            </Link>
+        </div>
+
         <header className="flex flex-col md:flex-row justify-between items-end mb-24 gap-8 border-b border-white/5 pb-12">
           <div className="space-y-4">
             <span className="text-gold font-bold uppercase tracking-[0.5em] text-[10px]">A Seleção Vista Alegre</span>
