@@ -30,18 +30,18 @@ export const PRODUCTS: Product[] = [
     category: 'Coloniais'
   },
   {
-    id: 'wine-branco-moscato',
-    name: 'Vinho Branco Moscato Giallo',
-    description: 'Leveza e frescor. Um vinho aromático, ideal para harmonizar com dias de sol e pratos leves.',
-    price: 150.00,
-    imageUrl: 'https://i.postimg.cc/7ZYRNF7B/vinhos-branco.png',
-    category: 'Vinhos Brancos'
-  },
-  {
     id: 'wine-branco-chardonnay',
     name: 'Vinho Branco Chardonnay',
     description: 'A rainha das uvas brancas. Notas frutadas e elegância, vinificado com excelência para paladares exigentes.',
     price: 170.00,
+    imageUrl: 'https://i.postimg.cc/7ZYRNF7B/vinhos-branco.png',
+    category: 'Vinhos Brancos'
+  },
+  {
+    id: 'wine-branco-moscato',
+    name: 'Vinho Branco Moscato Giallo',
+    description: 'Leveza e frescor. Um vinho aromático, ideal para harmonizar com dias de sol e pratos leves.',
+    price: 150.00,
     imageUrl: 'https://i.postimg.cc/qqTb6S4C/vinhos-brancos-2.png',
     category: 'Vinhos Brancos'
   },
