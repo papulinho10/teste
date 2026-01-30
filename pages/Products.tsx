@@ -92,6 +92,7 @@ const Products: React.FC<ProductsProps> = ({ onAddToCart }) => {
                   src={product.imageUrl} 
                   alt={product.name} 
                   className="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-[2s] drop-shadow-2xl"
+                  loading="lazy"
                 />
                 
                 {/* Botão flutuante ajustado para o novo design sem borda */}

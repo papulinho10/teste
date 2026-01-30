@@ -1,14 +1,16 @@
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, Suspense, lazy } from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import Products from './pages/Products';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import CartDrawer from './components/CartDrawer';
 import FloatingActions from './components/FloatingActions';
 import ScrollToTop from './components/ScrollToTop';
 import { Product, CartItem } from './types';
+
+// Lazy loading das páginas para melhorar performance inicial
+const Home = lazy(() => import('./pages/Home'));
+const Products = lazy(() => import('./pages/Products'));
 
 const App: React.FC = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -53,10 +55,16 @@ const App: React.FC = () => {
         />
         
         <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/vinhos" element={<Products onAddToCart={addToCart} />} />
-          </Routes>
+          <Suspense fallback={
+            <div className="min-h-screen bg-wine-black flex items-center justify-center">
+              <div className="w-12 h-12 border-4 border-gold border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          }>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/vinhos" element={<Products onAddToCart={addToCart} />} />
+            </Routes>
+          </Suspense>
         </main>
 
         <Footer />

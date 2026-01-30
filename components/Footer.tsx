@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { LOGO_URL, ADDRESS, ADDRESS_SUB, INSTAGRAM_HANDLE, INSTAGRAM_URL } from '../constants';
+import { LOGO_URL, ADDRESS, ADDRESS_SUB, ADDRESS_2, ADDRESS_SUB_2, INSTAGRAM_HANDLE, INSTAGRAM_URL } from '../constants';
 
 const Footer: React.FC = () => {
   return (
@@ -63,9 +63,21 @@ const Footer: React.FC = () => {
           {/* Location Section */}
           <div className="flex flex-col items-center md:items-start space-y-6">
             <h4 className="text-gold font-bold uppercase tracking-[0.3em] text-[10px]">Onde Estamos</h4>
-            <div className="text-center md:text-left space-y-2">
-              <p className="text-sm font-medium">{ADDRESS}</p>
-              <p className="text-xs font-light text-ivory/50">{ADDRESS_SUB}</p>
+            
+            <div className="text-center md:text-left space-y-6">
+              {/* Unidade Gramado */}
+              <div className="space-y-1">
+                <p className="text-[10px] text-gold/60 uppercase tracking-widest font-bold">Gramado</p>
+                <p className="text-sm font-medium">{ADDRESS}</p>
+                <p className="text-xs font-light text-ivory/50">{ADDRESS_SUB}</p>
+              </div>
+
+              {/* Unidade Canela */}
+              <div className="space-y-1">
+                <p className="text-[10px] text-gold/60 uppercase tracking-widest font-bold">Canela</p>
+                <p className="text-sm font-medium">{ADDRESS_2}</p>
+                <p className="text-xs font-light text-ivory/50">{ADDRESS_SUB_2}</p>
+              </div>
             </div>
           </div>
 

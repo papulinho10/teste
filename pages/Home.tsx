@@ -1,10 +1,12 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LOGO_URL, ADDRESS, WHATSAPP_NUMBER, INSTAGRAM_HANDLE, INSTAGRAM_URL, MAP_URL } from '../constants';
+import { LOGO_URL, ADDRESS, ADDRESS_SUB, ADDRESS_2, ADDRESS_SUB_2, WHATSAPP_NUMBER, INSTAGRAM_HANDLE, INSTAGRAM_URL, MAP_URL } from '../constants';
 
 const Home: React.FC = () => {
   const location = useLocation();
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isMuted, setIsMuted] = useState(true);
 
   useEffect(() => {
     // Se houver um estado indicando para rolar para o contato (vindo de outra página)
@@ -18,6 +20,44 @@ const Home: React.FC = () => {
     }
   }, [location]);
 
+  // Lógica de Play/Pause baseada na rolagem (Intersection Observer)
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    if (!videoElement) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Vídeo entrou na tela (50% visível) -> Play
+            videoElement.play().catch((err) => {
+                console.log('Autoplay prevent:', err);
+            });
+          } else {
+            // Vídeo saiu da tela -> Pause
+            videoElement.pause();
+          }
+        });
+      },
+      {
+        threshold: 0.5, // Dispara quando 50% do vídeo estiver visível
+      }
+    );
+
+    observer.observe(videoElement);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
+
   return (
     <div className="flex flex-col bg-wine-black">
       {/* Hero Section */}
@@ -27,6 +67,7 @@ const Home: React.FC = () => {
               src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=1920" 
               className="w-full h-full object-cover opacity-30" 
               alt="Wine Background"
+              loading="eager" // Carregamento prioritário para a imagem principal
             />
             <div className="absolute inset-0 bg-gradient-to-b from-wine-black/50 via-wine-black/20 to-wine-black" />
         </div>
@@ -40,6 +81,7 @@ const Home: React.FC = () => {
                 src={LOGO_URL} 
                 alt="Vista Alegre" 
                 className="w-full h-full object-contain"
+                loading="eager"
               />
             </div>
           </div>
@@ -67,19 +109,39 @@ const Home: React.FC = () => {
                 - aspect-[9/16] no mobile para ocupar a tela verticalmente (formato Stories/Reels).
                 - md:aspect-[3/4] no desktop para manter a elegância.
              */}
-             <div className="aspect-[9/16] md:aspect-[3/4] overflow-hidden rounded-[40px] shadow-2xl border border-white/5 bg-wine-dark/20 relative">
+             <div className="aspect-[9/16] md:aspect-[3/4] overflow-hidden rounded-[40px] shadow-2xl border border-white/5 bg-wine-dark/20 relative group/video">
                 {/* 
-                  ATUALIZADO:
-                  - Adicionado scale-[1.05] (105%) para dar um leve zoom e cortar as bordas pretas do player do Drive.
-                  - w-full h-full para preencher o container ajustado.
+                  VIDEO ATUALIZADO
+                  - Removido controls (tira os 3 pontos).
+                  - Play/Pause controlado pelo IntersectionObserver no useEffect.
+                  - muted controlado pelo state (inicia true/mudo).
                 */}
-                <iframe 
-                  src="https://drive.google.com/file/d/1FCbmhZzjQHnaEIAftvocBAYAUa7TFtia/preview" 
-                  className="w-full h-full rounded-[40px] transform scale-[1.05] md:scale-100 transition-transform" 
-                  style={{ border: 0 }}
-                  allow="autoplay; encrypted-media"
-                  title="Vista Alegre Video"
-                ></iframe>
+                <video 
+                  ref={videoRef}
+                  src="https://files.catbox.moe/5nq54t.mp4" 
+                  className="w-full h-full object-cover rounded-[40px]" 
+                  muted={isMuted}
+                  loop
+                  playsInline
+                />
+                
+                {/* Botão Customizado de Mute/Unmute */}
+                <button 
+                  onClick={toggleMute}
+                  className="absolute bottom-6 right-6 w-12 h-12 bg-black/40 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-wine transition-all duration-300 border border-white/10 z-20"
+                  aria-label={isMuted ? "Ativar som" : "Desativar som"}
+                >
+                  {isMuted ? (
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" clipRule="evenodd" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                    </svg>
+                  )}
+                </button>
              </div>
           </div>
           <div className="w-full md:w-1/2 space-y-10">
@@ -135,6 +197,7 @@ const Home: React.FC = () => {
                   src="https://i.postimg.cc/5t2yqCPK/imagem-para-site.jpg" 
                   alt="Vista panorâmica da Serra Gaúcha com tábua de frios e vinho" 
                   className="w-full h-full object-cover transform scale-105 group-hover:scale-110 transition-transform duration-[1.5s]"
+                  loading="lazy" // Carregamento tardio para melhorar performance
                 />
              </div>
              {/* Floating Badge */}
@@ -195,11 +258,23 @@ const Home: React.FC = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold uppercase tracking-[0.2em] text-ivory">Endereço</h3>
-              <p className="text-lg font-bold text-center text-ivory/90">{ADDRESS}</p>
+              <h3 className="text-xl font-bold uppercase tracking-[0.2em] text-ivory">Nossas Lojas</h3>
+              
+              <div className="flex flex-col gap-4 w-full px-2">
+                <div className="text-center">
+                    <span className="text-[10px] font-bold text-gold uppercase tracking-widest block mb-1">Gramado</span>
+                    <p className="text-lg font-bold text-ivory/90 leading-tight">{ADDRESS}</p>
+                </div>
+                <div className="w-12 h-px bg-white/10 mx-auto"></div>
+                <div className="text-center">
+                    <span className="text-[10px] font-bold text-gold uppercase tracking-widest block mb-1">Canela</span>
+                    <p className="text-lg font-bold text-ivory/90 leading-tight">{ADDRESS_2}</p>
+                </div>
+              </div>
+
               <button 
                 onClick={() => window.open(`https://maps.google.com/?q=${ADDRESS}`, '_blank')}
-                className="bg-[#3B82F6] text-white px-10 py-3 rounded-full flex items-center gap-2 hover:brightness-110 transition-all font-bold uppercase tracking-widest text-[10px] shadow-lg"
+                className="bg-[#3B82F6] text-white px-10 py-3 rounded-full flex items-center gap-2 hover:brightness-110 transition-all font-bold uppercase tracking-widest text-[10px] shadow-lg mt-2"
               >
                 Ver no Mapa
               </button>
