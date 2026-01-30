@@ -3,10 +3,76 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { LOGO_URL, ADDRESS, ADDRESS_SUB, ADDRESS_2, ADDRESS_SUB_2, WHATSAPP_NUMBER, INSTAGRAM_HANDLE, INSTAGRAM_URL, MAP_URL } from '../constants';
 
+// --- Componente Interno para o Card de Avaliação (Para gerenciar o estado 'Ler mais' individualmente) ---
+const ReviewCard: React.FC<{ name: string; text: string }> = ({ name, text }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const maxLength = 200; // Quantidade de caracteres antes de cortar
+  const shouldTruncate = text.length > maxLength;
+
+  return (
+    <div className="bg-wine-dark/30 backdrop-blur-sm p-8 rounded-[2rem] border border-white/5 flex flex-col items-start space-y-4 shadow-lg hover:bg-wine-dark/50 transition-all duration-500 group h-full">
+      {/* Estrelas */}
+      <div className="flex gap-1 text-gold">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <svg key={star} className="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+          </svg>
+        ))}
+      </div>
+      
+      {/* Texto */}
+      <div className="flex-grow">
+        <p className="text-ivory/70 font-light leading-relaxed text-sm md:text-base">
+          <span className="text-gold text-2xl leading-none mr-2 font-serif">"</span>
+          {isExpanded || !shouldTruncate ? text : `${text.slice(0, maxLength)}...`}
+        </p>
+      </div>
+
+      {/* Rodapé do Card: Nome + Botão */}
+      <div className="w-full pt-4 border-t border-white/5 flex flex-col items-start gap-2">
+        <h4 className="font-serif text-xl text-ivory font-bold">{name}</h4>
+        
+        {shouldTruncate && (
+          <button 
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="text-[10px] font-bold uppercase tracking-[0.2em] text-gold hover:text-white transition-colors flex items-center gap-1 mt-2"
+          >
+            {isExpanded ? 'Ler menos' : 'Ler mais'}
+            <svg 
+              className={`w-3 h-3 transform transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const reviewsData = [
+  {
+    name: "Polly Almeida",
+    text: "Fui super bem recebida na Adega Vista Alegre! O atendimento feito pelo Nemias foi excepcional — atencioso, educado e muito prestativo. Tive degustações deliciosas de geleias, salames (inclusive o de carne de javali), além de vinhos e sucos da Serra Gaúcha. O local oferece uma variedade incrível de produtos artesanais de produtores locais, todos de excelente qualidade. Ambiente acolhedor, experiência completa e atendimento impecável. Super recomendo a visita! 🍷🧀✨"
+  },
+  {
+    name: "Felipe Rocha",
+    text: "A Vinícola Vista Alegre oferece uma experiência completa, acolhedora e cheia de sabor. A degustação de queijos e vinhos é um verdadeiro destaque: rótulos de excelente qualidade harmonizados com queijos deliciosos, tudo apresentado com atenção e conhecimento pelos anfitriões. O ambiente é agradável, organizado e transmite a autenticidade da produção local. Outro diferencial é a variedade de produtos à venda, incluindo lâminas, couros e facas artesanais — itens belíssimos e de ótima qualidade, que dão um charme extra à visita. Um passeio que combina tradição, gastronomia e cultura gaúcha de forma impecável. Vale muito a pena conhecer!"
+  },
+  {
+    name: "Fernanda Medeiro",
+    text: "De todas as degustações que já participei, essa foi, sem dúvida, a melhor. Os atendentes foram extremamente atenciosos e não mediram esforços para agradar o grupo em que eu estava. Queijos e vinhos de excelente qualidade, servidos à vontade, em um ambiente acolhedor e bem organizado. Um grande diferencial é que não há qualquer pressão para comprar…o que torna a experiência ainda mais agradável. Curiosamente, justamente por serem produtos tão saborosos e de alta qualidade, as pessoas acabam comprando espontaneamente. Uma experiência que recomendo!"
+  }
+];
+
 const Home: React.FC = () => {
   const location = useLocation();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
+  const GOOGLE_REVIEWS_URL = "https://www.google.com/search?q=vin%C3%ADcola+vista+alegre+gramado&sca_esv=83277d8885f8cf32&rlz=1C1ONGR_enBR1153BR1153&biw=1536&bih=703&aic=0&sxsrf=ANbL-n4WS62gFLIC89sm6eTiVxjx79nOyQ%3A1769803148963&ei=jA19adjDOva91sQPoZu9mQc&oq=vin%C3%ADcola+em+gramado+-+vista+alegre+avalia%C3%A7%C3%B5es&gs_lp=Egxnd3Mtd2l6LXNlcnAiMHZpbsOtY29sYSBlbSBncmFtYWRvIC0gdmlzdGEgYWxlZ3JlIGF2YWxpYcOnw7VlcyoCCAAyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEdI6iJQAFgAcAF4AZABAJgBAKABAKoBALgBAcgBAJgCAaACCZgDAIgGAZAGCJIHATGgBwCyBwC4BwDCBwMyLTHIBwaACAA&sclient=gws-wiz-serp";
 
   useEffect(() => {
     // Se houver um estado indicando para rolar para o contato (vindo de outra página)
@@ -161,7 +227,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* NOVA SEÇÃO: Parada Perfeita */}
+      {/* Seção Parada Perfeita */}
       <section className="py-24 px-6 bg-[#0F0404] border-t border-white/5 relative overflow-hidden">
         {/* Background Decorative Bloom */}
         <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[500px] h-[500px] bg-wine/10 blur-[120px] rounded-full pointer-events-none" />
@@ -192,12 +258,11 @@ const Home: React.FC = () => {
           <div className="w-full md:w-1/2 relative">
              <div className="relative aspect-square md:aspect-[4/5] rounded-[2rem] overflow-hidden shadow-2xl border border-white/5 group">
                 <div className="absolute inset-0 bg-wine-dark/20 group-hover:bg-transparent transition-colors duration-500 z-10" />
-                {/* ⬇️ IMAGEM DA PARADA PERFEITA ⬇️ */}
                 <img 
                   src="https://i.postimg.cc/5t2yqCPK/imagem-para-site.jpg" 
                   alt="Vista panorâmica da Serra Gaúcha com tábua de frios e vinho" 
                   className="w-full h-full object-cover transform scale-105 group-hover:scale-110 transition-transform duration-[1.5s]"
-                  loading="lazy" // Carregamento tardio para melhorar performance
+                  loading="lazy"
                 />
              </div>
              {/* Floating Badge */}
@@ -205,6 +270,91 @@ const Home: React.FC = () => {
                 <span className="block text-gold text-2xl font-serif font-bold">Gramado</span>
                 <span className="block text-ivory/60 text-xs uppercase tracking-widest mt-1">Serra Gaúcha</span>
              </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* Seção de Experiência de Degustação */}
+      <section className="py-24 px-6 bg-gradient-to-b from-[#0F0404] to-[#2D090E] border-t border-white/5 relative overflow-hidden">
+        {/* Decorative Background Element */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-4xl bg-wine/5 blur-[100px] rounded-full pointer-events-none" />
+
+        <div className="max-w-4xl mx-auto text-center relative z-10 space-y-8">
+          <span className="text-gold font-bold uppercase tracking-[0.4em] text-[10px] animate-pulse">
+             Convite Especial
+          </span>
+
+          <h2 className="font-serif text-4xl md:text-6xl text-ivory leading-tight">
+            Viva uma Experiência Exclusiva de <br/>
+            <span className="italic text-gold">Degustações</span> em Gramado
+          </h2>
+
+          <p className="text-xl md:text-2xl text-ivory/90 font-light italic">
+            "Descubra sabores únicos em um ambiente acolhedor. Vinhos selecionados, atendimento especializado e uma experiência que vai além da degustação."
+          </p>
+
+          <div className="w-24 h-px bg-gold/30 mx-auto my-6" />
+
+          <p className="text-ivory/60 leading-relaxed font-light text-lg max-w-2xl mx-auto">
+            Embarque em uma jornada sensorial única no coração de Gramado. Nossa degustação premium oferece vinhos selecionados e harmonizações exclusivas. Devido à alta demanda, recomendamos que você agende sua visita com antecedência para garantir um atendimento especial.
+          </p>
+
+          <div className="pt-8">
+            <button
+              onClick={() => window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=Olá! Gostaria de agendar uma degustação na Adega Vista Alegre.`, '_blank')}
+              className="bg-[#22C55E] hover:bg-[#1fa851] text-white px-12 py-5 rounded-full font-bold uppercase tracking-[0.2em] text-xs transition-all duration-500 shadow-[0_10px_40px_rgba(34,197,94,0.2)] hover:-translate-y-1 flex items-center gap-3 mx-auto"
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.937 3.672 1.433 5.661 1.433h.05c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+              Garanta sua visita no WhatsApp
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* NOVA SEÇÃO: Avaliações dos Clientes (Testimonials) */}
+      <section className="py-24 px-6 bg-[#0B0303] border-t border-white/5 relative">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16 space-y-4">
+             <span className="text-gold font-bold uppercase tracking-[0.4em] text-[10px]">Depoimentos</span>
+             <h2 className="font-serif text-4xl md:text-5xl text-ivory font-light leading-tight">
+               Veja o que nossos clientes <br className="hidden md:block" /> dizem sobre nós
+             </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {reviewsData.map((review, index) => (
+              <ReviewCard key={index} name={review.name} text={review.text} />
+            ))}
+          </div>
+
+          {/* Aviso de Avaliações Reais */}
+          <div className="mt-12 flex flex-col md:flex-row items-center justify-center gap-6 text-center animate-fade-in">
+             <p className="text-ivory/50 text-xs md:text-sm font-light flex items-center gap-2 bg-wine-dark/30 px-4 py-2 rounded-full border border-white/5">
+                <svg className="w-4 h-4 text-[#34A853]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                </svg>
+                Avaliações reais de clientes verificados no Google
+             </p>
+             <button
+               onClick={() => window.open(GOOGLE_REVIEWS_URL, '_blank')}
+               className="text-[10px] font-bold uppercase tracking-widest text-gold hover:text-white border border-gold/30 hover:border-white/50 px-6 py-3 rounded-full transition-all flex items-center gap-3 hover:bg-white/5 group"
+             >
+                <div className="w-4 h-4 relative flex items-center justify-center">
+                   <svg className="w-full h-full" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+                      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+                      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.84z" fill="#FBBC05" />
+                      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+                   </svg>
+                </div>
+                Conferir no Google
+                <svg className="w-3 h-3 text-gold/50 group-hover:text-white group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+             </button>
           </div>
 
         </div>
