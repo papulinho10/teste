@@ -3,15 +3,36 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { LOGO_URL, ADDRESS, ADDRESS_SUB, ADDRESS_2, ADDRESS_SUB_2, WHATSAPP_NUMBER, INSTAGRAM_HANDLE, INSTAGRAM_URL, MAP_URL } from '../constants';
 
-// --- Componente Interno para o Card de Avaliação (Para gerenciar o estado 'Ler mais' individualmente) ---
+// --- Componente de Imagem com Fade-In Suave ---
+const FadeImage: React.FC<{ src: string; alt: string; className?: string; priority?: boolean }> = ({ src, alt, className, priority = false }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    // Pré-carrega a imagem na memória
+    const img = new Image();
+    img.src = src;
+    img.onload = () => setIsLoaded(true);
+  }, [src]);
+
+  return (
+    <img 
+      src={src} 
+      alt={alt} 
+      className={`${className} img-transition ${isLoaded ? 'img-loaded' : 'img-loading'}`}
+      loading={priority ? "eager" : "lazy"}
+      decoding={priority ? "sync" : "async"}
+    />
+  );
+};
+
+// --- Componente Interno para o Card de Avaliação ---
 const ReviewCard: React.FC<{ name: string; text: string }> = ({ name, text }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const maxLength = 200; // Quantidade de caracteres antes de cortar
+  const maxLength = 200; 
   const shouldTruncate = text.length > maxLength;
 
   return (
     <div className="bg-wine-dark/30 backdrop-blur-sm p-8 rounded-[2rem] border border-white/5 flex flex-col items-start space-y-4 shadow-lg hover:bg-wine-dark/50 transition-all duration-500 group h-full">
-      {/* Estrelas */}
       <div className="flex gap-1 text-gold">
         {[1, 2, 3, 4, 5].map((star) => (
           <svg key={star} className="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -20,7 +41,6 @@ const ReviewCard: React.FC<{ name: string; text: string }> = ({ name, text }) =>
         ))}
       </div>
       
-      {/* Texto */}
       <div className="flex-grow">
         <p className="text-ivory/70 font-light leading-relaxed text-sm md:text-base">
           <span className="text-gold text-2xl leading-none mr-2 font-serif">"</span>
@@ -28,7 +48,6 @@ const ReviewCard: React.FC<{ name: string; text: string }> = ({ name, text }) =>
         </p>
       </div>
 
-      {/* Rodapé do Card: Nome + Botão */}
       <div className="w-full pt-4 border-t border-white/5 flex flex-col items-start gap-2">
         <h4 className="font-serif text-xl text-ivory font-bold">{name}</h4>
         
@@ -72,6 +91,7 @@ const Home: React.FC = () => {
   const location = useLocation();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
   const GOOGLE_REVIEWS_URL = "https://www.google.com/search?q=vin%C3%ADcola+vista+alegre+gramado&sca_esv=83277d8885f8cf32&rlz=1C1ONGR_enBR1153BR1153&biw=1536&bih=703&aic=0&sxsrf=ANbL-n4WS62gFLIC89sm6eTiVxjx79nOyQ%3A1769803148963&ei=jA19adjDOva91sQPoZu9mQc&oq=vin%C3%ADcola+em+gramado+-+vista+alegre+avalia%C3%A7%C3%B5es&gs_lp=Egxnd3Mtd2l6LXNlcnAiMHZpbsOtY29sYSBlbSBncmFtYWRvIC0gdmlzdGEgYWxlZ3JlIGF2YWxpYcOnw7VlcyoCCAAyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEdI6iJQAFgAcAF4AZABAJgBAKABAKoBALgBAcgBAJgCAaACCZgDAIgGAZAGCJIHATGgBwCyBwC4BwDCBwMyLTHIBwaACAA&sclient=gws-wiz-serp";
 
   useEffect(() => {
@@ -93,61 +113,36 @@ const Home: React.FC = () => {
     }
   }, [location]);
 
-  // Lógica de Autoplay Robusta para Mobile
+  // Efeito para sincronizar estado se o vídeo pausar/tocar por outros meios (ex: navegador pausando)
   useEffect(() => {
-    const videoElement = videoRef.current;
-    if (!videoElement) return;
+    const video = videoRef.current;
+    if (!video) return;
 
-    // Força atributos vitais diretamente no DOM para contornar limitações do React/Mobile
-    videoElement.muted = true;
-    videoElement.playsInline = true;
-    videoElement.autoplay = true;
-    videoElement.setAttribute('muted', '');
-    videoElement.setAttribute('playsinline', '');
-    videoElement.setAttribute('autoplay', '');
+    const onPlay = () => setIsPlaying(true);
+    const onPause = () => setIsPlaying(false);
 
-    const attemptPlay = async () => {
-      try {
-        videoElement.muted = true; // Redundância necessária
-        await videoElement.play();
-      } catch (err) {
-        console.warn('Autoplay prevented by browser:', err);
-      }
-    };
-
-    // Tenta tocar imediatamente
-    attemptPlay();
-
-    // Monitora visibilidade para pausar/tocar (Performance)
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            // Se visível, tenta tocar novamente
-            if (videoElement.paused) {
-              attemptPlay();
-            }
-          } else {
-            // Se não visível, pausa
-            if (!videoElement.paused) {
-              videoElement.pause();
-            }
-          }
-        });
-      },
-      {
-        threshold: 0.1, // Baixo limiar para ativar logo
-      }
-    );
-
-    observer.observe(videoElement);
+    video.addEventListener('play', onPlay);
+    video.addEventListener('pause', onPause);
 
     return () => {
-      observer.disconnect();
+      video.removeEventListener('play', onPlay);
+      video.removeEventListener('pause', onPause);
     };
   }, []);
 
-  const toggleMute = () => {
+
+  const togglePlay = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+    }
+  };
+
+  const toggleMute = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Evita que o clique no botão de mute pause o vídeo
     if (videoRef.current) {
       const newMutedState = !videoRef.current.muted;
       videoRef.current.muted = newMutedState;
@@ -158,13 +153,14 @@ const Home: React.FC = () => {
   return (
     <div className="flex flex-col bg-wine-black">
       {/* Hero Section */}
-      <section className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden py-24">
-        <div className="absolute inset-0 z-0">
-            <img 
+      <section className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden py-24 bg-wine-black">
+        <div className="absolute inset-0 z-0 bg-wine-black">
+            {/* Imagem de Fundo com Fade-In */}
+            <FadeImage 
               src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=1920" 
               className="w-full h-full object-cover opacity-30" 
               alt="Wine Background"
-              loading="eager" 
+              priority={true}
             />
             <div className="absolute inset-0 bg-gradient-to-b from-wine-black/50 via-wine-black/20 to-wine-black" />
         </div>
@@ -172,11 +168,12 @@ const Home: React.FC = () => {
         <div className="relative z-10 flex flex-col items-center text-center px-6">
           <div className="mb-0 relative group animate-fade-in">
             <div className="relative h-56 w-56 md:h-80 md:w-80 p-0 bg-transparent rounded-full overflow-hidden transform hover:scale-105 transition-transform duration-700 flex items-center justify-center">
-              <img 
+              {/* Logo com Fade-In */}
+              <FadeImage 
                 src={LOGO_URL} 
                 alt="Vista Alegre" 
                 className="w-full h-full object-contain"
-                loading="eager"
+                priority={true}
               />
             </div>
           </div>
@@ -194,25 +191,38 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Intro Section - VIDEO FIX */}
+      {/* Intro Section - VIDEO COM CONTROLE MANUAL */}
       <section className="py-32 px-6 bg-wine-black overflow-hidden border-t border-white/5">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-20">
           <div className="w-full md:w-1/2 relative group">
              <div className="absolute -top-10 -left-10 w-40 h-40 border-t-2 border-l-2 border-gold/20" />
-             <div className="aspect-[9/16] md:aspect-[3/4] overflow-hidden rounded-[40px] shadow-2xl border border-white/5 bg-wine-dark/20 relative group/video">
+             
+             {/* Container do Vídeo com Evento de Clique */}
+             <div 
+               className="aspect-[9/16] md:aspect-[3/4] overflow-hidden rounded-[40px] shadow-2xl border border-white/5 bg-wine-dark/20 relative group/video cursor-pointer"
+               onClick={togglePlay}
+             >
                 <video 
                   ref={videoRef}
                   src="https://files.catbox.moe/5nq54t.mp4" 
                   className="w-full h-full object-cover rounded-[40px]" 
-                  poster="https://i.postimg.cc/5t2yqCPK/imagem-para-site.jpg"
-                  muted 
-                  playsInline 
-                  autoPlay 
+                  poster="https://i.postimg.cc/Hnwpc4B2/Whats-App-Image-2026-01-25-at-14-28-08-(3).jpg"
+                  muted // Começa mutado por segurança, usuário pode desmutar
+                  playsInline
                   loop
-                  preload="auto"
+                  preload="metadata" // Carrega apenas metadados inicial
                 />
                 
-                {/* Botão Customizado de Mute/Unmute */}
+                {/* Overlay de Play (Aparece quando pausado) */}
+                <div className={`absolute inset-0 bg-black/40 flex items-center justify-center transition-opacity duration-500 ${isPlaying ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+                   <div className="w-20 h-20 md:w-24 md:h-24 bg-white/10 backdrop-blur-md border border-white/30 rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(0,0,0,0.5)] group-hover/video:scale-110 transition-transform duration-300">
+                      <svg className="w-8 h-8 md:w-10 md:h-10 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                         <path d="M8 5v14l11-7z" />
+                      </svg>
+                   </div>
+                </div>
+
+                {/* Botão de Mute/Unmute (Canto Inferior) */}
                 <button 
                   onClick={toggleMute}
                   className="absolute bottom-6 right-6 w-12 h-12 bg-black/40 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-wine transition-all duration-300 border border-white/10 z-20"
@@ -250,12 +260,10 @@ const Home: React.FC = () => {
 
       {/* Seção Parada Perfeita */}
       <section className="py-24 px-6 bg-[#0F0404] border-t border-white/5 relative overflow-hidden">
-        {/* Background Decorative Bloom */}
         <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[500px] h-[500px] bg-wine/10 blur-[120px] rounded-full pointer-events-none" />
 
         <div className="max-w-7xl mx-auto flex flex-col-reverse md:flex-row items-center gap-16 md:gap-24">
           
-          {/* Text Side */}
           <div className="w-full md:w-1/2 space-y-8">
             <div className="space-y-2">
               <span className="text-gold font-bold uppercase tracking-[0.4em] text-[10px]">Localização Privilegiada</span>
@@ -275,18 +283,15 @@ const Home: React.FC = () => {
             </div>
           </div>
 
-          {/* Image Side */}
           <div className="w-full md:w-1/2 relative">
              <div className="relative aspect-square md:aspect-[4/5] rounded-[2rem] overflow-hidden shadow-2xl border border-white/5 group">
                 <div className="absolute inset-0 bg-wine-dark/20 group-hover:bg-transparent transition-colors duration-500 z-10" />
-                <img 
+                <FadeImage 
                   src="https://i.postimg.cc/5t2yqCPK/imagem-para-site.jpg" 
                   alt="Vista panorâmica da Serra Gaúcha com tábua de frios e vinho" 
                   className="w-full h-full object-cover transform scale-105 group-hover:scale-110 transition-transform duration-[1.5s]"
-                  loading="lazy"
                 />
              </div>
-             {/* Floating Badge */}
              <div className="absolute -bottom-6 -left-6 bg-wine-dark border border-white/10 p-6 rounded-2xl shadow-xl z-20 hidden md:block">
                 <span className="block text-gold text-2xl font-serif font-bold">Gramado</span>
                 <span className="block text-ivory/60 text-xs uppercase tracking-widest mt-1">Serra Gaúcha</span>
@@ -296,9 +301,8 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Seção de Experiência de Degustação - ADICIONADO ID 'convite' */}
+      {/* Seção de Experiência de Degustação */}
       <section id="convite" className="py-24 px-6 bg-gradient-to-b from-[#0F0404] to-[#2D090E] border-t border-white/5 relative overflow-hidden">
-        {/* Decorative Background Element */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-4xl bg-wine/5 blur-[100px] rounded-full pointer-events-none" />
 
         <div className="max-w-4xl mx-auto text-center relative z-10 space-y-8">
@@ -335,7 +339,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* NOVA SEÇÃO: Avaliações dos Clientes (Testimonials) - ADICIONADO ID 'depoimentos' */}
+      {/* Avaliações dos Clientes */}
       <section id="depoimentos" className="py-24 px-6 bg-[#0B0303] border-t border-white/5 relative">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 space-y-4">
@@ -351,7 +355,6 @@ const Home: React.FC = () => {
             ))}
           </div>
 
-          {/* Aviso de Avaliações Reais */}
           <div className="mt-12 flex flex-col md:flex-row items-center justify-center gap-6 text-center animate-fade-in">
              <p className="text-ivory/50 text-xs md:text-sm font-light flex items-center gap-2 bg-wine-dark/30 px-4 py-2 rounded-full border border-white/5">
                 <svg className="w-4 h-4 text-[#34A853]" fill="none" stroke="currentColor" viewBox="0 0 24 24">

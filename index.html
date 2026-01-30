@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
   <head>
@@ -8,8 +9,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <!-- Preload do vídeo para melhorar performance -->
+    
+    <!-- OTIMIZAÇÃO DE CARREGAMENTO -->
+    <!-- Preload do Vídeo -->
     <link rel="preload" href="https://files.catbox.moe/5nq54t.mp4" as="video" type="video/mp4">
+    <!-- Preload da Imagem de Fundo (Hero) -->
+    <link rel="preload" href="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=1920" as="image">
+    <!-- Preload da Logo -->
+    <link rel="preload" href="https://i.postimg.cc/yd6qthqV/logo.png" as="image">
+    
     <style>
       html { scroll-behavior: smooth; }
       body {
@@ -25,6 +33,11 @@
       .btn-pill {
         @apply px-10 py-4 rounded-full font-bold uppercase tracking-[0.3em] text-[10px] transition-all duration-500 shadow-sm hover:shadow-xl transform hover:-translate-y-1 active:scale-95;
       }
+
+      /* Fade in suave para imagens */
+      .img-loading { opacity: 0; filter: blur(10px); transform: scale(1.02); }
+      .img-loaded { opacity: 1; filter: blur(0); transform: scale(1); }
+      .img-transition { transition: opacity 0.7s ease-out, filter 0.7s ease-out, transform 0.7s ease-out; }
 
       /* Custom Scrollbar */
       ::-webkit-scrollbar { width: 5px; }
