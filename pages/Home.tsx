@@ -100,22 +100,31 @@ const Home: React.FC = () => {
     const videoElement = videoRef.current;
     if (!videoElement) return;
 
+    // Garante que comece mudo no nível do DOM para satisfazer políticas de autoplay
+    videoElement.muted = true;
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // Vídeo entrou na tela (50% visível) -> Play
-            videoElement.play().catch((err) => {
-                console.log('Autoplay prevent:', err);
-            });
+            // Vídeo entrou na tela
+            // Tenta reproduzir. Se falhar (ex: economia de bateria), captura o erro silenciosamente.
+            const playPromise = videoElement.play();
+            if (playPromise !== undefined) {
+              playPromise.catch((error) => {
+                console.log('Autoplay prevent or aborted:', error);
+                // Fallback: garante que está mudo e tenta de novo se necessário
+                videoElement.muted = true;
+              });
+            }
           } else {
-            // Vídeo saiu da tela -> Pause
+            // Vídeo saiu da tela -> Pause para economizar recursos
             videoElement.pause();
           }
         });
       },
       {
-        threshold: 0.5, // Dispara quando 50% do vídeo estiver visível
+        threshold: 0.1, // Reduzido para 10% para iniciar mais cedo no mobile
       }
     );
 
@@ -128,8 +137,10 @@ const Home: React.FC = () => {
 
   const toggleMute = () => {
     if (videoRef.current) {
-      videoRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
+      // Inverte o estado
+      const newMutedState = !videoRef.current.muted;
+      videoRef.current.muted = newMutedState;
+      setIsMuted(newMutedState);
     }
   };
 
@@ -186,19 +197,20 @@ const Home: React.FC = () => {
              */}
              <div className="aspect-[9/16] md:aspect-[3/4] overflow-hidden rounded-[40px] shadow-2xl border border-white/5 bg-wine-dark/20 relative group/video">
                 {/* 
-                  VIDEO ATUALIZADO
-                  - Removido controls (tira os 3 pontos).
-                  - Play/Pause controlado pelo IntersectionObserver no useEffect.
-                  - muted controlado pelo state (inicia true/mudo).
-                  - ADICIONADO: preload="auto" para evitar travamentos
+                  VIDEO OTIMIZADO PARA MOBILE:
+                  - playsInline: Essencial para iOS não abrir em fullscreen.
+                  - autoPlay: Fallback nativo se o JS falhar.
+                  - muted & defaultMuted: Garante política de autoplay.
                 */}
                 <video 
                   ref={videoRef}
                   src="https://files.catbox.moe/5nq54t.mp4" 
                   className="w-full h-full object-cover rounded-[40px]" 
-                  muted={isMuted}
+                  muted={isMuted} // React control
+                  defaultMuted={true} // DOM control inicial
+                  playsInline // OBRIGATÓRIO PARA IOS
+                  autoPlay // OBRIGATÓRIO PARA MOBILE
                   loop
-                  playsInline
                   preload="auto"
                 />
                 
@@ -321,6 +333,125 @@ const Home: React.FC = () => {
               </svg>
               Garanta sua visita no WhatsApp
             </button>
+          </div>
+        </div>
+      </section>
+
+      {/* NOVA SEÇÃO: Avaliações dos Clientes (Testimonials) - ADICIONADO ID 'depoimentos' */}
+      <section id="depoimentos" className="py-24 px-6 bg-[#0B0303] border-t border-white/5 relative">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16 space-y-4">
+             <span className="text-gold font-bold uppercase tracking-[0.4em] text-[10px]">Depoimentos</span>
+             <h2 className="font-serif text-4xl md:text-5xl text-ivory font-light leading-tight">
+               Veja o que nossos clientes <br className="hidden md:block" /> dizem sobre nós
+             </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {reviewsData.map((review, index) => (
+              <ReviewCard key={index} name={review.name} text={review.text} />
+            ))}
+          </div>
+
+          {/* Aviso de Avaliações Reais */}
+          <div className="mt-12 flex flex-col md:flex-row items-center justify-center gap-6 text-center animate-fade-in">
+             <p className="text-ivory/50 text-xs md:text-sm font-light flex items-center gap-2 bg-wine-dark/30 px-4 py-2 rounded-full border border-white/5">
+                <svg className="w-4 h-4 text-[#34A853]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                </svg>
+                Avaliações reais de clientes verificados no Google
+             </p>
+             <button
+               onClick={() => window.open(GOOGLE_REVIEWS_URL, '_blank')}
+               className="text-[10px] font-bold uppercase tracking-widest text-gold hover:text-white border border-gold/30 hover:border-white/50 px-6 py-3 rounded-full transition-all flex items-center gap-3 hover:bg-white/5 group"
+             >
+                <div className="w-4 h-4 relative flex items-center justify-center">
+                   <svg className="w-full h-full" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+                      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+                      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.84z" fill="#FBBC05" />
+                      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+                   </svg>
+                </div>
+                Conferir no Google
+                <svg className="w-3 h-3 text-gold/50 group-hover:text-white group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+             </button>
+          </div>
+
+        </div>
+      </section>
+
+      {/* Seção de Contato */}
+      <section id="contato" className="py-24 px-6 bg-[#0B0303] text-white scroll-mt-24 border-t border-white/5">
+        <div className="max-w-7xl mx-auto text-center">
+          <h2 className="text-4xl md:text-6xl font-serif mb-6 text-ivory font-light">Entre em Contato</h2>
+          <p className="text-white/40 mb-16 text-lg max-w-2xl mx-auto font-light">
+            Reserve sua experiência exclusiva em nossa adega e descubra sabores inesquecíveis.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-wine-dark/40 p-12 rounded-[2.5rem] border border-white/5 flex flex-col items-center space-y-6 transition-all hover:bg-wine-dark/60 hover:-translate-y-2 shadow-lg">
+              <div className="w-16 h-16 bg-[#22C55E] rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(34,197,94,0.3)]">
+                <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12c0 1.54.36 2.98 1 4.29L1.81 21.3a1 1 0 001.29 1.29L8.41 21c1.31.64 2.75 1 4.29 1 5.52 0 10-4.48 10-10S17.52 2 12 2z"/>
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold uppercase tracking-[0.2em] text-ivory">WhatsApp</h3>
+              <p className="text-xl font-bold text-ivory/90">(54) 99684-4704</p>
+              <button 
+                onClick={() => window.open(`https://wa.me/${WHATSAPP_NUMBER}`, '_blank')}
+                className="bg-[#22C55E] text-white px-10 py-3 rounded-full flex items-center gap-2 hover:brightness-110 transition-all font-bold uppercase tracking-widest text-[10px] shadow-lg"
+              >
+                Conversar Agora
+              </button>
+            </div>
+
+            <div className="bg-wine-dark/40 p-12 rounded-[2.5rem] border border-white/5 flex flex-col items-center space-y-6 transition-all hover:bg-wine-dark/60 hover:-translate-y-2 shadow-lg">
+              <div className="w-16 h-16 bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(238,42,123,0.3)]">
+                <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M19,5A1,1 0 0,1 20,6A1,1 0 0,1 19,7A1,1 0 0,1 18,6A1,1 0 0,1 19,5Z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold uppercase tracking-[0.2em] text-ivory">Instagram</h3>
+              <p className="text-xl font-bold text-ivory/90">{INSTAGRAM_HANDLE}</p>
+              <button 
+                onClick={() => window.open(INSTAGRAM_URL, '_blank')}
+                className="bg-gradient-to-r from-[#833ab4] to-[#fd1d1d] text-white px-10 py-3 rounded-full flex items-center gap-2 hover:brightness-110 transition-all font-bold uppercase tracking-widest text-[10px] shadow-lg"
+              >
+                Seguir Perfil
+              </button>
+            </div>
+
+            <div className="bg-wine-dark/40 p-12 rounded-[2.5rem] border border-white/5 flex flex-col items-center space-y-6 transition-all hover:bg-wine-dark/60 hover:-translate-y-2 shadow-lg">
+              <div className="w-16 h-16 bg-[#3B82F6] rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(59,130,246,0.3)]">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold uppercase tracking-[0.2em] text-ivory">Nossas Lojas</h3>
+              
+              <div className="flex flex-col gap-4 w-full px-2">
+                <div className="text-center">
+                    <span className="text-[10px] font-bold text-gold uppercase tracking-widest block mb-1">Gramado</span>
+                    <p className="text-lg font-bold text-ivory/90 leading-tight">{ADDRESS}</p>
+                </div>
+                <div className="w-12 h-px bg-white/10 mx-auto"></div>
+                <div className="text-center">
+                    <span className="text-[10px] font-bold text-gold uppercase tracking-widest block mb-1">Canela</span>
+                    <p className="text-lg font-bold text-ivory/90 leading-tight">{ADDRESS_2}</p>
+                </div>
+              </div>
+
+              <button 
+                onClick={() => window.open(`https://maps.google.com/?q=${ADDRESS}`, '_blank')}
+                className="bg-[#3B82F6] text-white px-10 py-3 rounded-full flex items-center gap-2 hover:brightness-110 transition-all font-bold uppercase tracking-widest text-[10px] shadow-lg mt-2"
+              >
+                Ver no Mapa
+              </button>
+            </div>
           </div>
         </div>
       </section>
