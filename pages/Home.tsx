@@ -75,14 +75,23 @@ const Home: React.FC = () => {
   const GOOGLE_REVIEWS_URL = "https://www.google.com/search?q=vin%C3%ADcola+vista+alegre+gramado&sca_esv=83277d8885f8cf32&rlz=1C1ONGR_enBR1153BR1153&biw=1536&bih=703&aic=0&sxsrf=ANbL-n4WS62gFLIC89sm6eTiVxjx79nOyQ%3A1769803148963&ei=jA19adjDOva91sQPoZu9mQc&oq=vin%C3%ADcola+em+gramado+-+vista+alegre+avalia%C3%A7%C3%B5es&gs_lp=Egxnd3Mtd2l6LXNlcnAiMHZpbsOtY29sYSBlbSBncmFtYWRvIC0gdmlzdGEgYWxlZ3JlIGF2YWxpYcOnw7VlcyoCCAAyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEdI6iJQAFgAcAF4AZABAJgBAKABAKoBALgBAcgBAJgCAaACCZgDAIgGAZAGCJIHATGgBwCyBwC4BwDCBwMyLTHIBwaACAA&sclient=gws-wiz-serp";
 
   useEffect(() => {
-    // Se houver um estado indicando para rolar para o contato (vindo de outra página)
-    if (location.state && (location.state as any).scrollToContact) {
-      const contactSection = document.getElementById('contato');
-      if (contactSection) {
+    // Se houver um estado indicando para rolar para uma seção específica (vindo de outra página)
+    if (location.state && (location.state as any).targetId) {
+      const targetId = (location.state as any).targetId;
+      const section = document.getElementById(targetId);
+      if (section) {
         setTimeout(() => {
-          contactSection.scrollIntoView({ behavior: 'smooth' });
+          section.scrollIntoView({ behavior: 'smooth' });
         }, 100); // Pequeno delay para garantir que a renderização ocorreu
       }
+    } else if (location.state && (location.state as any).scrollToContact) {
+       // Mantendo compatibilidade caso algo antigo chame assim
+       const contactSection = document.getElementById('contato');
+       if (contactSection) {
+         setTimeout(() => {
+           contactSection.scrollIntoView({ behavior: 'smooth' });
+         }, 100);
+       }
     }
   }, [location]);
 
@@ -152,15 +161,15 @@ const Home: React.FC = () => {
             </div>
           </div>
           
-          <h1 className="font-serif text-4xl md:text-7xl text-ivory mb-8 font-light leading-tight tracking-tight">
-            Momentos que <br/> <span className="italic text-gold">Amadurecem.</span>
+          <h1 className="font-serif text-4xl md:text-7xl text-ivory mb-8 font-light leading-tight tracking-tight italic">
+            Viva Sua <br/> <span className="text-gold">Melhor Safra</span>
           </h1>
           
           <Link 
             to="/vinhos" 
             className="bg-wine hover:bg-wine-light text-white px-10 py-4 rounded-full font-bold uppercase tracking-[0.3em] text-[9px] transition-all duration-500 shadow-[0_10px_40px_rgba(94,25,20,0.6)] border border-white/5"
           >
-            Nossa Adega
+            Conheça nossos vinhos
           </Link>
         </div>
       </section>
@@ -275,8 +284,8 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Seção de Experiência de Degustação */}
-      <section className="py-24 px-6 bg-gradient-to-b from-[#0F0404] to-[#2D090E] border-t border-white/5 relative overflow-hidden">
+      {/* Seção de Experiência de Degustação - ADICIONADO ID 'convite' */}
+      <section id="convite" className="py-24 px-6 bg-gradient-to-b from-[#0F0404] to-[#2D090E] border-t border-white/5 relative overflow-hidden">
         {/* Decorative Background Element */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-4xl bg-wine/5 blur-[100px] rounded-full pointer-events-none" />
 
@@ -285,7 +294,7 @@ const Home: React.FC = () => {
              Convite Especial
           </span>
 
-          <h2 className="font-serif text-4xl md:text-6xl text-ivory leading-tight">
+          <h2 className="font-serif text-3xl md:text-5xl text-ivory leading-tight">
             Viva uma Experiência Exclusiva de <br/>
             <span className="italic text-gold">Degustações</span> em Gramado
           </h2>
@@ -314,8 +323,8 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* NOVA SEÇÃO: Avaliações dos Clientes (Testimonials) */}
-      <section className="py-24 px-6 bg-[#0B0303] border-t border-white/5 relative">
+      {/* NOVA SEÇÃO: Avaliações dos Clientes (Testimonials) - ADICIONADO ID 'depoimentos' */}
+      <section id="depoimentos" className="py-24 px-6 bg-[#0B0303] border-t border-white/5 relative">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 space-y-4">
              <span className="text-gold font-bold uppercase tracking-[0.4em] text-[10px]">Depoimentos</span>

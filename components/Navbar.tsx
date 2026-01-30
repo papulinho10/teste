@@ -25,15 +25,17 @@ const Navbar: React.FC<NavbarProps> = ({ cartCount, onOpenCart }) => {
     setIsMenuOpen(false);
   }, [location]);
 
-  const handleContactClick = () => {
+  // Função genérica para rolar para uma seção (ID)
+  const handleSectionClick = (sectionId: string) => {
     setIsMenuOpen(false); // Garante que o menu feche
     if (location.pathname === '/') {
-      const contactSection = document.getElementById('contato');
-      if (contactSection) {
-        contactSection.scrollIntoView({ behavior: 'smooth' });
+      const sectionElement = document.getElementById(sectionId);
+      if (sectionElement) {
+        sectionElement.scrollIntoView({ behavior: 'smooth' });
       }
     } else {
-      navigate('/', { state: { scrollToContact: true } });
+      // Se não estiver na home, navega para a home e passa o ID alvo
+      navigate('/', { state: { targetId: sectionId } });
     }
   };
 
@@ -68,16 +70,36 @@ const Navbar: React.FC<NavbarProps> = ({ cartCount, onOpenCart }) => {
           </div>
         </Link>
 
-        {/* Links Desktop */}
+        {/* Links Desktop - ORDEM: Início, Convite, Depoimentos, Contatos, Adega */}
         <div className="hidden md:flex items-center space-x-8">
-          <Link to="/" className="text-[9px] font-bold uppercase tracking-[0.2em] text-ivory/80 hover:text-white transition-colors">Início</Link>
-          <Link to="/vinhos" className="text-[9px] font-bold uppercase tracking-[0.2em] text-ivory/80 hover:text-white transition-colors">Adega</Link>
+          <Link to="/" className="text-[9px] font-bold uppercase tracking-[0.2em] text-ivory/80 hover:text-white transition-colors">
+            Início
+          </Link>
+          
           <button 
-            onClick={handleContactClick}
+            onClick={() => handleSectionClick('convite')}
             className="text-[9px] font-bold uppercase tracking-[0.2em] text-ivory/80 hover:text-white transition-colors"
           >
-            Contato
+            Convite
           </button>
+
+          <button 
+            onClick={() => handleSectionClick('depoimentos')}
+            className="text-[9px] font-bold uppercase tracking-[0.2em] text-ivory/80 hover:text-white transition-colors"
+          >
+            Depoimentos
+          </button>
+
+          <button 
+            onClick={() => handleSectionClick('contato')}
+            className="text-[9px] font-bold uppercase tracking-[0.2em] text-ivory/80 hover:text-white transition-colors"
+          >
+            Contatos
+          </button>
+
+          <Link to="/vinhos" className="text-[9px] font-bold uppercase tracking-[0.2em] text-ivory/80 hover:text-white transition-colors">
+            Adega
+          </Link>
         </div>
 
         {/* Ações (Carrinho + Menu Mobile) */}
@@ -121,7 +143,7 @@ const Navbar: React.FC<NavbarProps> = ({ cartCount, onOpenCart }) => {
         </div>
       </div>
 
-      {/* Menu Dropdown Mobile */}
+      {/* Menu Dropdown Mobile - ORDEM: Início, Convite, Depoimentos, Contatos, Adega */}
       <div className={`absolute top-full left-0 right-0 mt-2 px-4 md:hidden transition-all duration-300 transform origin-top ${
         isMenuOpen ? 'opacity-100 scale-y-100 translate-y-0' : 'opacity-0 scale-y-0 -translate-y-4 pointer-events-none'
       }`}>
@@ -133,19 +155,35 @@ const Navbar: React.FC<NavbarProps> = ({ cartCount, onOpenCart }) => {
           >
             Início
           </Link>
+
+          <button 
+            onClick={() => handleSectionClick('convite')}
+            className="text-xs font-bold uppercase tracking-[0.2em] text-ivory hover:text-gold py-2 border-b border-white/5"
+          >
+            Convite
+          </button>
+
+          <button 
+            onClick={() => handleSectionClick('depoimentos')}
+            className="text-xs font-bold uppercase tracking-[0.2em] text-ivory hover:text-gold py-2 border-b border-white/5"
+          >
+            Depoimentos
+          </button>
+
+          <button 
+            onClick={() => handleSectionClick('contato')}
+            className="text-xs font-bold uppercase tracking-[0.2em] text-ivory hover:text-gold py-2 border-b border-white/5"
+          >
+            Contatos
+          </button>
+
           <Link 
             to="/vinhos" 
-            className="text-xs font-bold uppercase tracking-[0.2em] text-ivory hover:text-gold py-2 border-b border-white/5"
+            className="text-xs font-bold uppercase tracking-[0.2em] text-ivory hover:text-gold py-2"
             onClick={() => setIsMenuOpen(false)}
           >
-            Nossa Adega
+            Adega
           </Link>
-          <button 
-            onClick={handleContactClick}
-            className="text-xs font-bold uppercase tracking-[0.2em] text-ivory hover:text-gold py-2"
-          >
-            Contato
-          </button>
         </div>
       </div>
     </nav>
