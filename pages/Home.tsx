@@ -92,7 +92,8 @@ const Home: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
-  const GOOGLE_REVIEWS_URL = "https://www.google.com/search?q=vin%C3%ADcola+vista+alegre+gramado&sca_esv=83277d8885f8cf32&rlz=1C1ONGR_enBR1153BR1153&biw=1536&bih=703&aic=0&sxsrf=ANbL-n4WS62gFLIC89sm6eTiVxjx79nOyQ%3A1769803148963&ei=jA19adjDOva91sQPoZu9mQc&oq=vin%C3%ADcola+em+gramado+-+vista+alegre+avalia%C3%A7%C3%B5es&gs_lp=Egxnd3Mtd2l6LXNlcnAiMHZpbsOtY29sYSBlbSBncmFtYWRvIC0gdmlzdGEgYWxlZ3JlIGF2YWxpYcOnw7VlcyoCCAAyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEdI6iJQAFgAcAF4AZABAJgBAKABAKoBALgBAcgBAJgCAaACCZgDAIgGAZAGCJIHATGgBwCyBwC4BwDCBwMyLTHIBwaACAA&sclient=gws-wiz-serp";
+  const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar o modal
+  const GOOGLE_REVIEWS_URL = "https://www.google.com/search?q=vin%C3%ADcola+vista+alegre+gramado&sca_esv=83277d8885f8cf32&rlz=1C1ONGR_enBR1153BR1153&biw=1536&bih=703&aic=0&sxsrf=ANbL-n4WS62gFLIC89sm6eTiVxjx79nOyQ%3A1769803148963&ei=jA19adjDOva91sQPoZu9mQc&oq=vin%C3%ADcola+em+gramado+-+vista+alegre+avalia%C3%A7%C3%B5es&gs_lp=Egxnd3Mtd2l6LXNlcnAiMHZpbsOtY29sYSBlbSBncmFtYWRvIC0gdmlzdGEgYWxlZ3JlIGF2YWxpYcOnw7VlcyoCCAAyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEdI6iJQAFgAcAF4AZABAJgBAKABAKoBALgBAcgBAJgCAaACCZgDAIgGAZAGCJIHATGgBwCyBwC4BwDCBwMyLTHIBwaACAA&sclient=gws-wiz-serp";
 
   useEffect(() => {
     if (location.state && (location.state as any).targetId) {
@@ -148,6 +149,16 @@ const Home: React.FC = () => {
       videoRef.current.muted = newMutedState;
       setIsMuted(newMutedState);
     }
+  };
+
+  // Abre o Modal e Pausa o vídeo de fundo para não ter dois áudios
+  const openVideoModal = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (videoRef.current) {
+      videoRef.current.pause();
+      setIsPlaying(false);
+    }
+    setIsModalOpen(true);
   };
 
   return (
@@ -260,6 +271,17 @@ const Home: React.FC = () => {
                    </div>
                 </div>
 
+                {/* Botão de Expandir Vídeo (Canto Superior Direito) */}
+                <button 
+                  onClick={openVideoModal}
+                  className="absolute top-6 right-6 w-12 h-12 bg-black/40 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-wine transition-all duration-300 border border-white/10 z-20 group/btn"
+                  aria-label="Ver vídeo completo"
+                >
+                  <svg className="w-5 h-5 group-hover/btn:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                  </svg>
+                </button>
+
                 {/* Botão de Mute/Unmute (Canto Inferior) */}
                 <button 
                   onClick={toggleMute}
@@ -295,6 +317,38 @@ const Home: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* MODAL DE VÍDEO (LIGHTBOX) */}
+      {isModalOpen && (
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-xl p-4 animate-fade-in"
+          onClick={() => setIsModalOpen(false)}
+        >
+          {/* Botão Fechar Modal */}
+          <button 
+            onClick={() => setIsModalOpen(false)}
+            className="absolute top-6 right-6 z-[110] w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-white hover:bg-wine transition-colors border border-white/20"
+          >
+             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+             </svg>
+          </button>
+
+          <div 
+            className="relative w-full max-w-6xl max-h-[90vh] flex items-center justify-center"
+            onClick={(e) => e.stopPropagation()} // Impede fechamento ao clicar no vídeo
+          >
+             <video 
+               src="https://files.catbox.moe/5nq54t.mp4"
+               className="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl outline-none"
+               controls
+               autoPlay
+               controlsList="nodownload" // Remove o botão de download
+               onContextMenu={(e) => e.preventDefault()} // Desabilita o clique direito
+             />
+          </div>
+        </div>
+      )}
 
       {/* Seção Parada Perfeita */}
       <section className="py-24 px-6 bg-[#0F0404] border-t border-white/5 relative overflow-hidden">
