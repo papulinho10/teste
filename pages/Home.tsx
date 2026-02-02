@@ -92,7 +92,7 @@ const Home: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
-  const GOOGLE_REVIEWS_URL = "https://www.google.com/search?q=vin%C3%ADcola+vista+alegre+gramado&sca_esv=83277d8885f8cf32&rlz=1C1ONGR_enBR1153BR1153&biw=1536&bih=703&aic=0&sxsrf=ANbL-n4WS62gFLIC89sm6eTiVxjx79nOyQ%3A1769803148963&ei=jA19adjDOva91sQPoZu9mQc&oq=vin%C3%ADcola+em+gramado+-+vista+alegre+avalia%C3%A7%C3%B5es&gs_lp=Egxnd3Mtd2l6LXNlcnAiMHZpbsOtY29sYSBlbSBncmFtYWRvIC0gdmlzdGEgYWxlZ3JlIGF2YWxpYcOnw7VlcyoCCAAyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEdI6iJQAFgAcAF4AZABAJgBAKABAKoBALgBAcgBAJgCAaACCZgDAIgGAZAGCJIHATGgBwCyBwC4BwDCBwMyLTHIBwaACAA&sclient=gws-wiz-serp";
+  const GOOGLE_REVIEWS_URL = "https://www.google.com/search?q=vin%C3%ADcola+vista+alegre+gramado&sca_esv=83277d8885f8cf32&rlz=1C1ONGR_enBR1153BR1153&biw=1536&bih=703&aic=0&sxsrf=ANbL-n4WS62gFLIC89sm6eTiVxjx79nOyQ%3A1769803148963&ei=jA19adjDOva91sQPoZu9mQc&oq=vin%C3%ADcola+em+gramado+-+vista+alegre+avalia%C3%A7%C3%B5es&gs_lp=Egxnd3Mtd2l6LXNlcnAiMHZpbsOtY29sYSBlbSBncmFtYWRvIC0gdmlzdGEgYWxlZ3JlIGF2YWxpYcOnw7VlcyoCCAAyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEdI6iJQAFgAcAF4AZABAJgBAKABAKoBALgBAcgBAJgCAaACCZgDAIgGAZAGCJIHATGgBwCyBwC4BwDCBwMyLTHIBwaACAA&sclient=gws-wiz-serp";
 
   useEffect(() => {
     if (location.state && (location.state as any).targetId) {
@@ -191,7 +191,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* --- MOVIDO: Seção de Experiência de Degustação (Agora em destaque) --- */}
+      {/* --- Seção de Experiência de Degustação --- */}
       <section id="convite" className="py-24 px-6 bg-gradient-to-b from-[#0F0404] to-[#2D090E] border-t border-white/5 relative overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-4xl bg-wine/5 blur-[100px] rounded-full pointer-events-none" />
 
@@ -223,18 +223,13 @@ const Home: React.FC = () => {
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.937 3.672 1.433 5.661 1.433h.05c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
               </svg>
-              Garanta sua visita no WhatsApp
+              Garanta sua visita agora
             </button>
           </div>
         </div>
       </section>
 
       {/* Intro Section - VIDEO COM CONTROLE MANUAL */}
-      {/* 
-          ATUALIZAÇÃO:
-          - Alterado bg-wine-black para bg-gradient-to-b from-[#2D090E] to-wine-black
-          - Removido border-t border-white/5 para eliminar o corte visual
-      */}
       <section className="py-32 px-6 bg-gradient-to-b from-[#2D090E] to-wine-black overflow-hidden">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-20">
           <div className="w-full md:w-1/2 relative group">
@@ -341,6 +336,61 @@ const Home: React.FC = () => {
              </div>
           </div>
 
+        </div>
+      </section>
+
+      {/* Seção de Experiência e Autoridade (NOVA) */}
+      <section className="py-24 px-6 bg-[#0F0404] relative border-t border-white/5">
+        <div className="absolute inset-0 bg-wine-dark/20" /> {/* Slight tint */}
+        
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+            {/* Texto de Experiência e Botão CTA */}
+            <div className="space-y-6 mb-16">
+                <span className="text-gold font-bold uppercase tracking-[0.4em] text-[10px] block mb-6 animate-pulse">Nossa Essência</span>
+                <h2 className="font-serif text-3xl md:text-5xl text-ivory leading-tight">
+                    Viva uma experiência exclusiva de <br/>
+                    <span className="text-gold">degustação de vinhos</span> em Gramado
+                </h2>
+                
+                <p className="text-lg md:text-xl text-ivory/70 font-light max-w-2xl mx-auto">
+                    Uma experiência sensorial premium para quem aprecia vinhos e bons momentos. 
+                    Agende sua visita e tenha um atendimento personalizado.
+                </p>
+
+                <div className="pt-8">
+                     <button
+                      onClick={() => window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=Olá! Gostaria de agendar uma experiência de degustação.`, '_blank')}
+                      className="bg-[#22C55E] hover:bg-[#1fa851] text-white px-10 py-4 rounded-full font-bold uppercase tracking-[0.2em] text-xs transition-all duration-500 shadow-[0_10px_40px_rgba(34,197,94,0.2)] hover:-translate-y-1 flex items-center gap-3 mx-auto"
+                    >
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.937 3.672 1.433 5.661 1.433h.05c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                      </svg>
+                      Agendar experiência no WhatsApp
+                    </button>
+                </div>
+            </div>
+
+            {/* Novo Bloco de Citação Estilizado */}
+            <div className="max-w-4xl mx-auto text-left relative group">
+               {/* Gradient Border/Glow Effect */}
+               <div className="absolute -inset-[1px] bg-gradient-to-r from-gold/30 to-transparent rounded-r-[2rem] blur-sm opacity-50 group-hover:opacity-100 transition duration-700"></div>
+
+               <div className="relative bg-[#150505] border-l-[6px] border-gold p-8 md:p-12 rounded-r-[2rem] shadow-2xl flex flex-col md:flex-row gap-6 items-start md:items-center transform transition-transform duration-500 hover:scale-[1.01]">
+                 <div className="shrink-0">
+                    <svg className="w-12 h-12 text-gold opacity-80" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H15.017C14.4647 8 14.017 8.44772 14.017 9V11C14.017 11.5523 13.5693 12 13.017 12H12.017V5H22.017V15C22.017 18.3137 19.3307 21 16.017 21H14.017ZM5.01697 21L5.01697 18C5.01697 16.8954 5.9124 16 7.01697 16H10.017C10.5693 16 11.017 15.5523 11.017 15V9C11.017 8.44772 10.5693 8 10.017 8H6.01697C5.46468 8 5.01697 8.44772 5.01697 9V11C5.01697 11.5523 4.56925 12 4.01697 12H3.01697V5H13.017V15C13.017 18.3137 10.3307 21 7.01697 21H5.01697Z" />
+                    </svg>
+                 </div>
+                 <div>
+                    <p className="font-serif text-xl md:text-2xl text-ivory italic leading-relaxed">
+                      "Mais do que uma loja, criamos um espaço para quem aprecia vinhos, experiências e momentos memoráveis."
+                    </p>
+                    <span className="block mt-4 text-gold text-xs font-bold uppercase tracking-[0.2em] opacity-80">
+                      — Vista Alegre
+                    </span>
+                 </div>
+               </div>
+            </div>
         </div>
       </section>
 
