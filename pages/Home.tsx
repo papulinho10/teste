@@ -92,7 +92,7 @@ const Home: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
-  const GOOGLE_REVIEWS_URL = "https://www.google.com/search?q=vin%C3%ADcola+vista+alegre+gramado&sca_esv=83277d8885f8cf32&rlz=1C1ONGR_enBR1153BR1153&biw=1536&bih=703&aic=0&sxsrf=ANbL-n4WS62gFLIC89sm6eTiVxjx79nOyQ%3A1769803148963&ei=jA19adjDOva91sQPoZu9mQc&oq=vin%C3%ADcola+em+gramado+-+vista+alegre+avalia%C3%A7%C3%B5es&gs_lp=Egxnd3Mtd2l6LXNlcnAiMHZpbsOtY29sYSBlbSBncmFtYWRvIC0gdmlzdGEgYWxlZ3JlIGF2YWxpYcOnw7VlcyoCCAAyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEdI6iJQAFgAcAF4AZABAJgBAKABAKoBALgBAcgBAJgCAaACCZgDAIgGAZAGCJIHATGgBwCyBwC4BwDCBwMyLTHIBwaACAA&sclient=gws-wiz-serp";
+  const GOOGLE_REVIEWS_URL = "https://www.google.com/search?q=vin%C3%ADcola+vista+alegre+gramado&sca_esv=83277d8885f8cf32&rlz=1C1ONGR_enBR1153BR1153&biw=1536&bih=703&aic=0&sxsrf=ANbL-n4WS62gFLIC89sm6eTiVxjx79nOyQ%3A1769803148963&ei=jA19adjDOva91sQPoZu9mQc&oq=vin%C3%ADcola+em+gramado+-+vista+alegre+avalia%C3%A7%C3%B5es&gs_lp=Egxnd3Mtd2l6LXNlcnAiMHZpbsOtY29sYSBlbSBncmFtYWRvIC0gdmlzdGEgYWxlZ3JlIGF2YWxpYcOnw7VlcyoCCAAyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEcyChAAGLADGNYEGEdI6iJQAFgAcAF4AZABAJgBAKABAKoBALgBAcgBAJgCAaACCZgDAIgGAZAGCJIHATGgBwCyBwC4BwDCBwMyLTHIBwaACAA&sclient=gws-wiz-serp";
 
   useEffect(() => {
     if (location.state && (location.state as any).targetId) {
@@ -201,8 +201,8 @@ const Home: React.FC = () => {
           </span>
 
           <h2 className="font-serif text-3xl md:text-5xl text-ivory leading-tight">
-            Viva uma Experiência Exclusiva de <br/>
-            <span className="italic text-gold">Degustações</span> em Gramado
+            A experiência de degustação mais <br/>
+            <span className="italic text-gold">exclusiva</span> de Gramado
           </h2>
 
           <p className="text-xl md:text-2xl text-ivory/90 font-light italic">
